@@ -46,6 +46,18 @@ end
 get "/events/:id/rsvps/create" do
     puts "params: #{params}"
 
+    # First Find the Event that they're RSVPing For... See Params
+    @event = events_table.where(id: params[:id]).to_a[0]
+
+    # Second - I want to insert a row in the RSVPs table with the RSVP Form Data
+    rsvps_table.insert(
+        event_id: @event[:id],
+        name: params["name"],
+        email: params["email"],
+        comments: params["comments"],
+        going: params["going"]
+    )
+
     view "create_rsvp"
 end
 
